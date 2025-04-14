@@ -8,16 +8,16 @@ app = FastAPI()
 def load_all_data():
     create_db_and_tables()
 
-@app.post('/data')
+@app.post('/data',status_code=201)
 def add_data(request:Blog,session:SessionDep):
     session.add(request)
     session.commit()
     session.refresh(request)
     return request
 
-@app.get('/blogs_data')
-def fetching_all_data(session:SessionDep):
-    blogs = session.exec(select(Blog)).all()
+@app.get('/blogs_data/{id}')
+def fetching_all_data(id,session:SessionDep):
+    blogs = session.exec(select(Blog)).filter(Blog.id==id)
     return blogs
 
 @app.post('/blog')
