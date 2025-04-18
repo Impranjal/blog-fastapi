@@ -6,4 +6,12 @@ class Blogs(BaseModel):
     published:bool
     published_date: datetime
     contents:str
+
+class ShowBlog(Blogs):
+    pass
+    class Config():
+        orm_mode=True
+
+
+class user(BaseModel):
     

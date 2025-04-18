@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from schema import Blogs
+from schema import Blogs,ShowBlog
 from database import *
 import uvicorn
 
@@ -16,7 +16,7 @@ def add_data(request:Blog,session:SessionDep):
     return request
 
 @app.get('/blogs_data/{id}')
-def fetching_all_data(id:int,session:SessionDep):
+def fetching_all_data(id:int,session:SessionDep,response_model=ShowBlog):
     blogs = session.exec(select(Blog).where(Blog.id==id))
     return blogs.first()
 
@@ -32,6 +32,10 @@ def destroy(id:int,session:SessionDep):
     session.delete(raw_id)
     session.commit()
     return {'ok':True}
+
+@app.post('/user')
+def create_user(schema_user:user):
+
 
 if __name__ == "__main__":
     uvicorn.run('main:app',host='127.0.0.1',port=5051,reload=True)
