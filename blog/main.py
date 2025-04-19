@@ -1,9 +1,18 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from schema import Blogs,ShowBlog
 from database import *
 import uvicorn
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="blog/static"), name="static")
+
+
+templates = Jinja2Templates(directory="blog/template")
+
 @app.on_event("startup")
 def load_all_data():
     create_db_and_tables()
@@ -33,9 +42,8 @@ def destroy(id:int,session:SessionDep):
     session.commit()
     return {'ok':True}
 
-@app.post('/user')
-def create_user(schema_user:user):
-
-
-if __name__ == "__main__":
-    uvicorn.run('main:app',host='127.0.0.1',port=5051,reload=True)
+@app.get('/fetch_blogs',response_class=HTMLResponse)
+async def get_records(res:Request,id:str):
+    return templates.TemplateResponse(
+        request=res, name="item.html", context={"id": id}
+    )

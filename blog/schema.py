@@ -13,5 +13,7 @@ class ShowBlog(Blogs):
         orm_mode=True
 
 
-class user(BaseModel):
-    
+class User(BaseModel):
+    __tablename__ ="users"
+    name=Column
+
