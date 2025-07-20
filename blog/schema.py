@@ -15,5 +15,9 @@ class ShowBlog(Blogs):
 
 class User(BaseModel):
     __tablename__ ="users"
-    name=Column
+    name:str
+    email:str
+    password:str
+    
+    
 
