@@ -36,10 +36,10 @@ def add_data(request:Blog,session:SessionDep):
     return request
 
 
-@router.get('/blogs_data')
-def fetching_all_data( request: Request, session: SessionDep):
+@router.get('/blogs_data/{id}', response_class=HTMLResponse)
+def fetching_all_data(id: int, request: Request, session: SessionDep):
     try:
-        blog = session.exec(select(Blog).all())       
+        blog = session.exec(select(Blog).where(Blog.id == id)).first()
         if not blog:
             raise Exception()
     except Exception:
@@ -51,26 +51,26 @@ def fetching_all_data( request: Request, session: SessionDep):
             "blog": blog,
             "message": "Hello from FastAPI!",
             "username": "Pranjal"
-        }
+        
     )
 
-@router.get('/blogs_data/{id}', response_class=HTMLResponse)
-def fetching_data_by_id(id: int, request: Request, session: SessionDep):
-    try:
-        blog = session.exec(select(Blog).where(Blog.id == id)).first()
-        if not blog:
-            raise Exception()
-    except Exception:
-        raise HTTPException(status_code=404, detail="Blogs detail was not extracted")
-    return templates.TemplateResponse(
-        "login.html",
-        {
-            "request": request,
-            "blog": blog,
-            "message": "Hello from FastAPI!",
-            "username": "Pranjal"
-        }
-    )
+# @router.get('/blogs_data/{id}', response_class=HTMLResponse)
+# def fetching_data_by_id(id: int, request: Request, session: SessionDep):
+#     try:
+#         blog = session.exec(select(Blog).where(Blog.id == id)).first()
+#         if not blog:
+#             raise Exception()
+#     except Exception:
+#         raise HTTPException(status_code=404, detail="Blogs detail was not extracted")
+#     return templates.TemplateResponse(
+#         "base.html",
+#         {
+#             "request": request,
+#             "blog": blog,
+#             "message": "Hello from FastAPI!",
+#             "username": "Pranjal"
+#         }
+#     )
 
 
 @router.post('/blog')
