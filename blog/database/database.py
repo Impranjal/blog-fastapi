@@ -2,10 +2,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLITE_DATABASE_URL = "sqlite:///./note.db"
+SQLITE_DATABASE_URL = "sqlite:///./blogs_app.db"
 
 engine = create_engine(
-    SQLITE_DATABASE_URL, echo=True, connect_args={"check_same_thread": False}
+    SQLITE_DATABASE_URL, connect_args={"check_same_thread": False}
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -19,9 +19,5 @@ def get_db():
     finally:
         db.close()
 
-class UserData(Base):
-    __tablename__: str
-    email:str
-    password:str
-    username:str
+
     

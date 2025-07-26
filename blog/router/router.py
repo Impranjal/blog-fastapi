@@ -9,7 +9,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import status
 
-from database.database import *
 from validator.request_validation import RequestModel
 
 router= APIRouter(prefix='/blog',tags=['blog'])
