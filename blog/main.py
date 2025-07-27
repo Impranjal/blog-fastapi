@@ -16,5 +16,6 @@ app.include_router(user.router)
 @app.get('/Welcome')
 def hello():
     return {"message":"Hello world"}
+    
 
 models.Base.metadata.create_all(bind=engine)
