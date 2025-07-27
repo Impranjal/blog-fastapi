@@ -21,6 +21,6 @@ async def get_user_route(db:Session=Depends(get_db)):
 async def get_user_based_on_id(id :int ,db:Session=Depends(get_db)):
     return get_user_id(id,db)
 
-@router.post('/update/{id}',response_model=UserDisplay)
+@router.post('/update/{id}')
 async def update_user_data(id:int,request:UserBase,db:Session=Depends(get_db)):
     return update_user(id,request,db)
