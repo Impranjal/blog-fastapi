@@ -28,3 +28,9 @@ def update_user(id:int,request:UserBase,db:Session):
 
     })
     db.commit()
+
+def delete_user(id:int,db=Session):
+    user = db.query(UserData).filter(UserData.id == id).first()
+    db.delete(user)
+    db.commit()
+    return "ok"

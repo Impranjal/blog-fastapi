@@ -1,4 +1,4 @@
-from fastapi import APIRouter,Depends
+from fastapi import APIRouter,Depends,HTTPException
 from schemas import UserBase,UserDisplay
 from database.database import get_db
 from sqlalchemy.orm import Session
@@ -24,3 +24,9 @@ async def get_user_based_on_id(id :int ,db:Session=Depends(get_db)):
 @router.post('/update/{id}')
 async def update_user_data(id:int,request:UserBase,db:Session=Depends(get_db)):
     return update_user(id,request,db)
+
+@router.delete('/delete/{id}',status_code=200)
+async def delete_user_data(id:int,db:Session=Depends(get_db)):
+    if delete_user(id,db):
+        return {"User id {id} data deleted successfully"}
+    return HTTPException(status_code=404,detail="Delete couldn't be performed")

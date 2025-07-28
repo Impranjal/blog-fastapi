@@ -7,11 +7,12 @@ from router import router
 from router import user
 from database.database import engine
 from database import models
+app: FastAPI =FastAPI(title="GenAI Blog API",description="API powered by GenAI",version="1.0.0")
 
-app = FastAPI()
 app.mount('/static',StaticFiles(directory='static'),name='static')
 app.include_router(router.router)
 app.include_router(user.router)
+
 
 @app.get('/Welcome')
 def hello():
