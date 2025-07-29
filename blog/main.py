@@ -8,7 +8,15 @@ from router import user
 from database.database import engine
 from database import models
 app: FastAPI =FastAPI(title="GenAI Blog API",description="API powered by GenAI",version="1.0.0")
+from fastapi.middleware.cors import CORSMiddleware
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, specify your domain
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
 app.mount('/static',StaticFiles(directory='static'),name='static')
 app.include_router(router.router)
 app.include_router(user.router)
