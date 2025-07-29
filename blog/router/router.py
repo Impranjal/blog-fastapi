@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import status
 from database.database_user import create_user,get_user
-from schemas import UserBase,UserDisplay
+from schemas import UserBase,UserDisplay,Comment
 
 from validator.request_validation import RequestModel
 
@@ -17,11 +17,17 @@ router= APIRouter(prefix='/blog',tags=['blog'])
 templates= Jinja2Templates(directory='template')
 
 @router.post('/blogs_data/{id}')   
-async def create_blogs_data(rq:RequestModel):
+async def create_blogs_data(request:RequestModel):
     return {
-        "data":rq,
+        "data":request,
         "message": "Created a entry"
     }
-
+@router.post('/comment_data/{id}')
+async def comments_data(request:Comment):
+    if request:
+        return {
+            "data":request
+        }
+    return HTTPException(status=401,details="Request couldn't be processed")
 
 
