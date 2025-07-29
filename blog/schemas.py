@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class UserBase(BaseModel):
     id:int
@@ -12,3 +13,9 @@ class UserDisplay(BaseModel):
 
     class Config():
         orm_mode = True
+
+class Comment(BaseModel):
+    comment_data:str
+    id:str
+    author:str
+    date_of_comment: datetime =None
