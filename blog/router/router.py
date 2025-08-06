@@ -16,8 +16,12 @@ from validator.request_validation import RequestModel
 router= APIRouter(prefix='/blog',tags=['blog'])
 templates= Jinja2Templates(directory='template')
 
+@router.get('/create_post', response_class=HTMLResponse)
+async def show_create_post_form(request: Request):
+    return templates.TemplateResponse("base.html", {"request": request})
+
 @router.post('/create_post')
-async def submit_post(title:str=Form(),id:int=Form(),content:str=Form(),author_name:str=Form(),published:Optional[str]=Form()):
+async def submit_post(request: Request,title:str=Form(),id:int=Form(),content:str=Form(),author_name:str=Form(),published:Optional[str]=Form()):
     if published:
         published_bool=True
     else:
@@ -29,7 +33,11 @@ async def submit_post(title:str=Form(),id:int=Form(),content:str=Form(),author_n
         author_name=author_name,
         published=published_bool
     )
-    return {"msg":"The blog post has been created","data":blog_post.dict()}
+    return templates.TemplateResponse("base.html", {
+        "request": request,
+        "blog_post":blog_post,
+        "message": "Blog post created successfully!"
+    })
 
 @router.post('/comment_data/{id}')
 async def comments_data(request:Comment):

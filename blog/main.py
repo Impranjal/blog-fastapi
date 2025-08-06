@@ -14,17 +14,19 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # In production, specify your domain
     allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 app.mount('/static',StaticFiles(directory='static'),name='static')
 app.include_router(router.router)
 app.include_router(user.router)
+templates= Jinja2Templates(directory='template')
 
 
-@app.get('/Welcome')
-def hello():
-    return {"message":"Hello world"}
+@app.get('/')
+def hello(request:Request):
+    return templates.TemplateResponse("landing.html", {"request": request})
+
     
 
 models.Base.metadata.create_all(bind=engine)
