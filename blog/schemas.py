@@ -1,5 +1,13 @@
 from pydantic import BaseModel
+from typing import List
 from datetime import datetime
+
+class Article(BaseModel):
+    title:str
+    content:str
+    published:bool
+    class config():
+        orm_mode =True
 
 class UserBase(BaseModel):
     id:int
@@ -10,9 +18,31 @@ class UserBase(BaseModel):
 class UserDisplay(BaseModel):
     username:str
     email:str
-
+    items:List[Article] = []
     class Config():
         orm_mode = True
+
+
+class ArticleBase(BaseModel):
+    title:str
+    content:str
+    published:str
+    creator_id:int
+
+class User(BaseModel):
+    id:int
+    username:str
+    class config():
+        orm_mode=True
+
+        
+class ArticleDisplay(BaseModel):
+    title:str
+    content:str
+    published:bool
+    user: User
+    class config():
+        orm_mode =True
 
 class Comment(BaseModel):
     comment_data:str
