@@ -1,4 +1,4 @@
-from fastapi import APIRouter,Depends,HTTPException,Request
+from fastapi import APIRouter,Depends,HTTPException,Request,Form
 from schemas import UserBase,UserDisplay
 from database.database import get_db
 from fastapi.templating import Jinja2Templates
@@ -15,9 +15,18 @@ templates= Jinja2Templates(directory='template')
 async def login_page(request:Request):
     return templates.TemplateResponse("login.html", {"request": request})
                                       
-@router.post('/',response_model=UserDisplay, status_code=201)
-async def create_user_data(request:UserBase,db:Session=Depends(get_db)):
-    return create_user(db,request)
+@router.post('/register',response_model=UserDisplay, status_code=201)
+async def create_user_data(
+    name: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+    confirm_password: str = Form(...),
+    db: Session = Depends(get_db)):
+    if password != confirm_password:
+        # Handle error (e.g., return a template with an error message)
+        return {"error": "Passwords do not match"}
+    user = UserBase(username=name, email=email, password=password)
+    return create_user(db, user)
 
 @router.get('/',response_model=list[UserDisplay])
 async def get_user_route(db:Session=Depends(get_db)): 

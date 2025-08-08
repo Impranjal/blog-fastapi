@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List,Optional
 from datetime import datetime
 
 class Article(BaseModel):
@@ -10,7 +10,7 @@ class Article(BaseModel):
         orm_mode =True
 
 class UserBase(BaseModel):
-    id:int
+    id: Optional[int] = None    
     username:str
     password:str
     email:str
