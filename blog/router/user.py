@@ -1,14 +1,20 @@
-from fastapi import APIRouter,Depends,HTTPException
+from fastapi import APIRouter,Depends,HTTPException,Request
 from schemas import UserBase,UserDisplay
 from database.database import get_db
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse,RedirectResponse
 from sqlalchemy.orm import Session
 from database.database_user import *
 router = APIRouter(
     prefix='/user',
     tags=['user']
 )
-
+templates= Jinja2Templates(directory='template')
 #create user
+@router.get("/",response_class=HTMLResponse,status_code=201)
+async def login_page(request:Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+                                      
 @router.post('/',response_model=UserDisplay, status_code=201)
 async def create_user_data(request:UserBase,db:Session=Depends(get_db)):
     return create_user(db,request)

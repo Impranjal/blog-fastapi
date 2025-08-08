@@ -35,8 +35,7 @@ async def submit_post(request: Request,title:str=Form(),id:int=Form(),content:st
     )
     return templates.TemplateResponse("base.html", {
         "request": request,
-        "blog_post":blog_post,
-        "message": "Blog post created successfully!"
+        "blog_post":blog_post
     })
 
 @router.post('/comment_data/{id}')
