@@ -21,7 +21,14 @@ async def show_create_post_form(request: Request):
     return templates.TemplateResponse("base.html", {"request": request})
 
 @router.post('/create_post')
-async def submit_post(request: Request,title:str=Form(),id:int=Form(),content:str=Form(),author_name:str=Form(),published:Optional[str]=Form()):
+async def submit_post(
+    request: Request,
+    title: str = Form(),
+    id: int = Form(),
+    content: str = Form(),
+    author_name: str = Form(),
+    published: Optional[str] = Form()
+):
     if published:
         published_bool=True
     else:
@@ -33,10 +40,10 @@ async def submit_post(request: Request,title:str=Form(),id:int=Form(),content:st
         author_name=author_name,
         published=published_bool
     )
-    return templates.TemplateResponse("base.html", {
-        "request": request,
-        "blog_post":blog_post
-    })
+    return templates.TemplateResponse(
+        "base.html",
+        {"request": request, "message": "Blog created successfully!"}
+    )
 
 @router.post('/comment_data/{id}')
 async def comments_data(request:Comment):
