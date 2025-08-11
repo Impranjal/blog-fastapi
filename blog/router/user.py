@@ -25,7 +25,10 @@ async def create_user_data(
     if password != confirm_password:
         # Handle error (e.g., return a template with an error message)
         return {"error": "Passwords do not match"}
-    user = UserBase(username=name, email=email, password=password)
+    try:
+        user = UserBase(username=name, email=email, password=password)
+    except:
+        raise HTTPException(status_code=404,detail=f"Not able to register the user")
     return create_user(db, user)
 
 @router.get('/',response_model=list[UserDisplay])
