@@ -1,8 +1,10 @@
 from sqlalchemy.orm.session import Session
 from schemas import ArticleBase
 from database.models import ArticleData
-
+from exception import Storyexceptions
 def create_article(db:Session,request:ArticleBase):
+    if request.content.startswith("Once upon a time"):
+        raise Storyexceptions("No more stories over here")
     article = ArticleData(
         content = request.content,
         title = request.title,

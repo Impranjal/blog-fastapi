@@ -10,7 +10,6 @@ from fastapi.templating import Jinja2Templates
 from fastapi import status
 from database.database_user import create_user,get_user
 from schemas import UserBase,UserDisplay,Comment
-from exception import Storyexceptions
 from validator.request_validation import RequestModel
 
 router= APIRouter(prefix='/blog',tags=['blog'])
@@ -33,8 +32,6 @@ async def submit_post(
         published_bool=True
     else:
         published_bool=False
-    if title.startswith("Once upon a time"):
-        raise Storyexceptions("No more stories over here")
     blog_post= RequestModel(
         title=title,
         id=id,

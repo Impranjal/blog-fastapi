@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse,JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from router import router
 from router import user
 from database.database import engine
 from database import models
+from exception import Storyexceptions
 app: FastAPI =FastAPI(title="GenAI Blog API",description="API powered by GenAI",version="1.0.0")
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -26,6 +27,13 @@ templates= Jinja2Templates(directory='template')
 @app.get('/')
 def hello(request:Request):
     return templates.TemplateResponse("landing.html", {"request": request})
+
+@app.exception_handler(Storyexceptions)
+def exception_handler(request:Request,exp:Storyexceptions):
+    return JSONResponse(
+        status_code=418,
+        content= {"detail":exp.name}
+    )
 
     
 
