@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse,JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from router import router
+from router import router_article
 from router import user
 from database.database import engine
 from database import models
@@ -19,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.mount('/static',StaticFiles(directory='static'),name='static')
-app.include_router(router.router)
+app.include_router(router_article.router)
 app.include_router(user.router)
 templates= Jinja2Templates(directory='template')
 

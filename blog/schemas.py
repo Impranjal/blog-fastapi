@@ -23,11 +23,12 @@ class UserDisplay(BaseModel):
         orm_mode = True
 
 
-class ArticleBase(BaseModel):
-    title:str
-    content:str
-    published:str
-    creator_id:int
+class ArticleRequestModel(BaseModel):
+    title : str
+    id : int
+    content : str
+    author_name :str
+    published : Optional[bool]
 
 class User(BaseModel):
     id:int

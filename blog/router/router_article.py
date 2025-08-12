@@ -8,8 +8,8 @@ from fastapi.responses import Response,HTMLResponse,RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import status
-from database.database_user import create_user,get_user
-from schemas import UserBase,UserDisplay,Comment
+from database.database_article import create_article,get_all_article,get_article_by_id
+from schemas import UserBase,UserDisplay,Comment,ArticleRequestModel
 from validator.request_validation import RequestModel
 
 router= APIRouter(prefix='/blog',tags=['blog'])
@@ -32,13 +32,18 @@ async def submit_post(
         published_bool=True
     else:
         published_bool=False
-    blog_post= RequestModel(
+    blog_post= ArticleRequestModel(
         title=title,
         id=id,
         content=content,
         author_name=author_name,
         published=published_bool
     )
+    try:
+        blog_res= create_article(blog_post)
+    except Exception as e:
+        raise HTTPException(status_code=404,detail=f"The blog entry was not createf caught a exception {e}")
+    
     return templates.TemplateResponse(
         "base.html",
         {"request": request, "message": "Blog created successfully!"}
@@ -52,9 +57,6 @@ async def comments_data(request:Comment):
         }
     return HTTPException(status=401,details="Request couldn't be processed")
 
-@router.get('/withheader')
-def get_all_the_articles(response:Response,custom_header:Optional[str]=Header(None)):
 
-    return custom_header
 
 

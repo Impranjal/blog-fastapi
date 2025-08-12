@@ -1,8 +1,8 @@
 from sqlalchemy.orm.session import Session
-from schemas import ArticleBase
+from schemas import ArticleRequestModel
 from database.models import ArticleData
 from exception import Storyexceptions
-def create_article(db:Session,request:ArticleBase):
+def create_article(db:Session,request:ArticleRequestModel):
     if request.content.startswith("Once upon a time"):
         raise Storyexceptions("No more stories over here")
     article = ArticleData(
@@ -16,7 +16,16 @@ def create_article(db:Session,request:ArticleBase):
     db.commit()
     db.refresh()
     
+def get_all_article(db:Session):
+    """
+        Fetching the records of all the articles created
+    """
+    return db.query(ArticleData).all()
 
+def get_article_by_id(db:Session,id:int):
+    """
+            Fetching the data of the articles added to the database by id
+    """
+    article_data_by_id = db.query(ArticleData).filter(ArticleData.id==id).first()
+    return article_data_by_id
 
-# def get_article(db:Session,id:int):
-#     article = db.query()
