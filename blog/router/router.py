@@ -4,7 +4,7 @@ from typing import Optional
 from datetime import datetime
 from typing import Annotated
 from pydantic import BaseModel,Field 
-from fastapi.responses import HTMLResponse,RedirectResponse
+from fastapi.responses import Response,HTMLResponse,RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import status
@@ -51,5 +51,10 @@ async def comments_data(request:Comment):
             "data":request
         }
     return HTTPException(status=401,details="Request couldn't be processed")
+
+@router.get('/withheader')
+def get_all_the_articles(response:Response,custom_header:Optional[str]=Header(None)):
+
+    return custom_header
 
 

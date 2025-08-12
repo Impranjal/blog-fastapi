@@ -23,7 +23,6 @@ app.include_router(router.router)
 app.include_router(user.router)
 templates= Jinja2Templates(directory='template')
 
-
 @app.get('/')
 def hello(request:Request):
     return templates.TemplateResponse("landing.html", {"request": request})
