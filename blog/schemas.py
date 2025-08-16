@@ -28,6 +28,7 @@ class ArticleRequestModel(BaseModel):
     id : int
     content : str
     author_name :str
+    author_id:int
     published : Optional[bool]
 
 class User(BaseModel):

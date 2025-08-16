@@ -10,11 +10,11 @@ def create_article(db:Session,request:ArticleRequestModel):
         title = request.title,
         author_name = request.author_name,
         published=request.published,
-        user_id= request.creator_id
+        user_id= request.id
         )
     db.add(article)
     db.commit()
-    db.refresh()
+    db.refresh(article)
     
 def get_all_article(db:Session):
     """

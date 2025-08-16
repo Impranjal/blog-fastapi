@@ -1,4 +1,5 @@
 from fastapi import FastAPI,APIRouter,Request,Query,Path,Cookie,Header,Form,Depends,HTTPException,Form
+from sqlalchemy.orm import Session
 import uvicorn
 from typing import Optional
 from datetime import datetime
@@ -8,6 +9,7 @@ from fastapi.responses import Response,HTMLResponse,RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import status
+from database.database import get_db
 from database.database_article import create_article,get_all_article,get_article_by_id
 from schemas import UserBase,UserDisplay,Comment,ArticleRequestModel
 from validator.request_validation import RequestModel
@@ -26,7 +28,9 @@ async def submit_post(
     id: int = Form(),
     content: str = Form(),
     author_name: str = Form(),
-    published: Optional[str] = Form()
+    published: Optional[str] = Form(),
+    author_id:int=Form(),
+    db:Session=Depends(get_db)
 ):
     if published:
         published_bool=True
@@ -37,12 +41,13 @@ async def submit_post(
         id=id,
         content=content,
         author_name=author_name,
-        published=published_bool
+        published=published_bool,
+        author_id=author_id
     )
     try:
-        blog_res= create_article(blog_post)
+        blog_res= create_article(db,blog_post)
     except Exception as e:
-        raise HTTPException(status_code=404,detail=f"The blog entry was not createf caught a exception {e}")
+        raise HTTPException(status_code=404,detail=f"The blog entry was not create caught a exception {e}")
     
     return templates.TemplateResponse(
         "base.html",
