@@ -22,3 +22,4 @@ class ArticleData(Base):
     published= Column(Boolean)
     user_id = Column(Integer,ForeignKey("users.id"))
     user = relationship("UserData",back_populates='items')
+

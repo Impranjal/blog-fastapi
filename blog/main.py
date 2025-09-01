@@ -31,9 +31,6 @@ templates= Jinja2Templates(directory='template')
 def hello(request:Request):
     return templates.TemplateResponse("landing.html", {"request": request})
 
-@app.get("/items")
-async def get_new_items(token:Annotated[str,Depends(oauth2_scheme)]):
-    return {"token":token}
 
 @app.exception_handler(Storyexceptions)
 def exception_handler(request:Request,exp:Storyexceptions):

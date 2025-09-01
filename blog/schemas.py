@@ -51,3 +51,10 @@ class Comment(BaseModel):
     id:str
     author:str
     date_of_comment: datetime =None
+
+class User_auth(BaseModel):
+    username:str
+    email:str|None = None
+    full_name:str | None = None
+    disabled:bool | None = None
+    
