@@ -2,7 +2,7 @@ from fastapi.security import OAuth2PasswordBearer
 from typing import Optional
 from datetime import datetime, timedelta
 from jose import jwt
-from fastapi import APIRouter,Depends,HTTPException,Form,status
+from fastapi import APIRouter,Depends,HTTPException,Form,status,Request
 from sqlalchemy.orm import Session
 from database.database import get_db
 from jose.exceptions import JWTError
@@ -23,16 +23,27 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
   encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
   return encoded_jwt
 
-def get_current_user(token:str=Depends(oauth2_scheme),db:str=Depends(get_db)):
-    credential_exeption= HTTPException(status_code=401)
-    try:
-        payload=jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
-        username :str = payload.get("sub")
-        if username is None:
-            raise credential_exeption
-    except JWTError:
-       raise credential_exeption
-    user = get_user_username(username,db)
-    if user is None:
-       raise credential_exeption
-    return user
+
+def get_token_from_request(request: Request):
+  auth_header = request.headers.get("authorization")
+  if auth_header and auth_header.startswith("Bearer "):
+    return auth_header.split(" ", 1)[1]
+  token = request.cookies.get("access_token")
+  return token
+
+def get_current_user(request: Request, db: Session = Depends(get_db)):
+  credential_exeption = HTTPException(status_code=401)
+  token = get_token_from_request(request)
+  if not token:
+    raise credential_exeption
+  try:
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    username: str = payload.get("sub")
+    if username is None:
+      raise credential_exeption
+  except JWTError:
+    raise credential_exeption
+  user = get_user_username(username, db)
+  if user is None:
+    raise credential_exeption
+  return user

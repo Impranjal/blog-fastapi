@@ -17,7 +17,7 @@ from auth import auth
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify your domain
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -28,9 +28,21 @@ app.include_router(user.router)
 app.include_router(auth.router)
 templates= Jinja2Templates(directory='template')
 
+
 @app.get('/')
-def hello(request:Request):
-    return templates.TemplateResponse("landing.html", {"request": request})
+def hello(request: Request):
+    username = request.cookies.get("access_token")
+    from jose import jwt, JWTError
+    SECRET_KEY = '2dc62fb76d115486b0dc5bd94337edfd'
+    ALGORITHM = 'HS256'
+    user_name = None
+    if username:
+        try:
+            payload = jwt.decode(username, SECRET_KEY, algorithms=[ALGORITHM])
+            user_name = payload.get("sub")
+        except JWTError:
+            user_name = None
+    return templates.TemplateResponse("landing.html", {"request": request, "username": user_name})
 
 
 

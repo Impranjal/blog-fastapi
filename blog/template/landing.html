@@ -590,10 +590,27 @@
                 <span></span>
             </label>
             <ul class="nav-menu">
-                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="/user/home" class="nav-link">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#blog" class="nav-link">Blog</a></li>
-                <li><a href="/user" class="nav-link">Login/Register</a></li>                
+                <li><a href="/blog/blog" class="nav-link">Blog</a></li>
+                {% if username %}
+                    <li>
+                        <span class="nav-link" style="display: flex; align-items: center; gap: 6px;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+                                <circle cx="12" cy="8" r="4" fill="#555"/>
+                                <ellipse cx="12" cy="17" rx="7" ry="5" fill="#555"/>
+                            </svg>
+                            {{ username }}
+                        </span>
+                    </li>
+                    <li>
+                        <form action="/user/logout" method="get" style="display:inline;">
+                            <button type="submit" class="nav-link" style="background:none;border:none;cursor:pointer;color:#333;font-weight:500;">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="/user" class="nav-link">Login/Register</a></li>
+                {% endif %}
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
         </div>
@@ -605,8 +622,10 @@
             <h1>Share Your Stories</h1>
             <p>Welcome to BlogSpace - where ideas come to life and stories find their voice. Join our community of passionate writers and engaged readers.</p>
             <div class="cta-buttons">
-                <a href="/blog/create_post" class="btn btn-primary">Start Writing</a>
-                <a href="#" class="btn btn-secondary">Explore Blogs</a>
+                {% if username %}
+                    <a href="/blog/create_post" class="btn btn-primary">Start Writing</a>
+                {% endif %}
+                <a href="/blog/blog" class="btn btn-secondary">Explore Blogs</a>
             </div>
         </div>
     </section>
