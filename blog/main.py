@@ -9,11 +9,10 @@ from typing import Annotated
 from database.database import engine
 from database import models
 from exception import Storyexceptions
-from fastapi.security import OAuth2PasswordBearer
 app: FastAPI =FastAPI(title="GenAI Blog API",description="API powered by GenAI",version="1.0.0")
 from fastapi.middleware.cors import CORSMiddleware
+from schemas import User_auth
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,7 +29,6 @@ templates= Jinja2Templates(directory='template')
 @app.get('/')
 def hello(request:Request):
     return templates.TemplateResponse("landing.html", {"request": request})
-
 
 @app.exception_handler(Storyexceptions)
 def exception_handler(request:Request,exp:Storyexceptions):
