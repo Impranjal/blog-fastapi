@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse,RedirectResponse
 from sqlalchemy.orm import Session
 from database.database_user import *
+from auth.oauth2 import oauth2_scheme,get_current_user
 router = APIRouter(
     prefix='/user',
     tags=['user']
@@ -23,7 +24,6 @@ async def create_user_data(
     confirm_password: str = Form(...),
     db: Session = Depends(get_db)):
     if password != confirm_password:
-        # Handle error (e.g., return a template with an error message)
         return {"error": "Passwords do not match"}
     try:
         user = UserBase(username=name, email=email, password=password)
@@ -36,8 +36,14 @@ async def get_user_route(db:Session=Depends(get_db)):
     return get_user(db)
 
 @router.get('/{id}',response_model=UserDisplay,status_code=201)
-async def get_user_based_on_id(id :int ,db:Session=Depends(get_db)):
+async def get_user_based_on_id(id :int ,db:Session=Depends(get_db),token:UserDisplay= Depends(oauth2_scheme)):
     return get_user_id(id,db)
+
+@router.get('/{username}',status_code=201)
+async def get_user_based_username(username:str,db:Session=Depends(get_db),current_user:UserDisplay=Depends(get_current_user)):
+    return {
+        "current_user":current_user
+    }
 
 @router.post('/update/{id}')
 async def update_user_data(id:int,request:UserBase,db:Session=Depends(get_db)):

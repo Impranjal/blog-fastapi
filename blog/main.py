@@ -12,6 +12,7 @@ from exception import Storyexceptions
 app: FastAPI =FastAPI(title="GenAI Blog API",description="API powered by GenAI",version="1.0.0")
 from fastapi.middleware.cors import CORSMiddleware
 from schemas import User_auth
+from auth import auth
 
 
 app.add_middleware(
@@ -24,11 +25,14 @@ app.add_middleware(
 app.mount('/static',StaticFiles(directory='static'),name='static')
 app.include_router(router_article.router)
 app.include_router(user.router)
+app.include_router(auth.router)
 templates= Jinja2Templates(directory='template')
 
 @app.get('/')
 def hello(request:Request):
     return templates.TemplateResponse("landing.html", {"request": request})
+
+
 
 @app.exception_handler(Storyexceptions)
 def exception_handler(request:Request,exp:Storyexceptions):

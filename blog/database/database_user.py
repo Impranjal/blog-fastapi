@@ -19,6 +19,9 @@ def get_user(db: Session):
 def get_user_id(id: int ,db:Session):
     return db.query(UserData).filter(UserData.id==id).first()
 
+def get_user_username(username: str ,db:Session):
+    return db.query(UserData).filter(UserData.username==username).first()
+
 def update_user(id:int,request:UserBase,db:Session):
     user =db.query(UserData).filter(UserData.id==id)
     user.update({
