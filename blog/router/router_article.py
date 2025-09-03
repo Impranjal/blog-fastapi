@@ -20,8 +20,8 @@ router= APIRouter(prefix='/blog',tags=['blog'])
 templates= Jinja2Templates(directory='template')
 
 @router.get('/create_post', response_class=HTMLResponse)
-async def show_create_post_form(request: Request):
-    return templates.TemplateResponse("base.html", {"request": request})
+async def show_create_post_form(request: Request, current_user: User = Depends(get_current_user)):
+    return templates.TemplateResponse("base.html", {"request": request, "current_user": current_user})
 
 @router.post('/create_post')
 async def submit_post(

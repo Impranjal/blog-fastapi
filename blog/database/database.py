@@ -1,16 +1,19 @@
+
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLITE_DATABASE_URL = "sqlite:///./blogs_app.db"
+# Use DATABASE_URL from environment variable for cloud, fallback to SQLite for local
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./blogs_app.db")
 
-engine = create_engine(
-    SQLITE_DATABASE_URL, connect_args={"check_same_thread": False}
-)
+if DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+else:
+    engine = create_engine(DATABASE_URL)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 Base = declarative_base()
-
 
 def get_db():
     db = SessionLocal()
@@ -20,4 +23,3 @@ def get_db():
         db.close()
 
 
-    

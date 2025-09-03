@@ -1,6 +1,8 @@
 fastapi
 uvicorn
-sqlmodel
-passlib
-bcrypt
+sqlalchemy
+psycopg2-binary
+jinja2
 python-jose
+passlib
+alembic
