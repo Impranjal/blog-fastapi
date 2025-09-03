@@ -13,6 +13,7 @@ from database.database import get_db
 from database.database_article import create_article,get_all_article,get_article_by_id
 from schemas import UserBase,UserDisplay,Comment,ArticleRequestModel
 from validator.request_validation import RequestModel
+from auth.oauth2 import oauth2_scheme,get_current_user
 
 router= APIRouter(prefix='/blog',tags=['blog'])
 templates= Jinja2Templates(directory='template')
@@ -62,6 +63,16 @@ async def comments_data(request:Comment):
         }
     return HTTPException(status=401,details="Request couldn't be processed")
 
+@router.get('/get_all_blog')
+async def get_all_the_blogs(db:Session=Depends(get_db),current_user:UserDisplay=Depends(get_current_user)):
+    return {
+        "data":get_all_article(db),
+        "current_user":current_user
+    }
 
-
-
+@router.get('/get_all_blog/"{id}')
+async def get_all_the_blogs_id(id:int,db:Session=Depends(get_db),current_user:UserDisplay=Depends(get_current_user)):
+    return {
+        "data":get_article_by_id(db,id),
+        "current_user":current_user
+    }
