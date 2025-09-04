@@ -1,6 +1,6 @@
 # BlogSpace - FastAPI Blog Application
 
-![BlogSpace Screenshot](https://i.imgur.com/your-screenshot-url.png)
+<img width="913" height="419" alt="image" src="https://github.com/user-attachments/assets/8d050731-8825-47e6-b7a5-b8d264b86a19" />
 
 A modern blog platform where users can share their stories and connect with readers worldwide.
 
@@ -59,7 +59,7 @@ fastapi-blog/
 
 ## 🌐 Live Demo
 
-[View Live Application](https://your-app.render.com)
+[View Live Application]([https://your-app.render.com](https://blog-fastapi-uop4.onrender.com/))
 
 ## 📧 Contact
 
