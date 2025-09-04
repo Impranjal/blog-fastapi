@@ -49,10 +49,19 @@ fastapi-blog/
 ├── app/
 │   ├── main.py
 │   ├── models.py
+│   ├── schemas.py
+│   ├── crud.py
 │   ├── database.py
 │   ├── templates/
+│   │   ├── base.html
+│   │   ├── index.html
+│   │   ├── register.html
+│   │   └── profile.html
 │   ├── static/
+│   │   └── style.css
 │   └── routers/
+│       ├── users.py
+│       └── posts.py
 ├── requirements.txt
 └── README.md
 ```
