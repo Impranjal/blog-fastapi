@@ -68,7 +68,7 @@ fastapi-blog/
 
 ## 🌐 Live Demo
 
-[View Live Application]([https://blog-fastapi-uop4.onrender.com/])
+[View Live Application](https://blog-fastapi-uop4.onrender.com/)
 
 
 ## 📧 Contact
