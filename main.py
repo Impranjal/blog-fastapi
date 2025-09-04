@@ -44,8 +44,6 @@ def hello(request: Request):
             user_name = None
     return templates.TemplateResponse("landing.html", {"request": request, "username": user_name})
 
-
-
 @app.exception_handler(Storyexceptions)
 def exception_handler(request:Request,exp:Storyexceptions):
     return JSONResponse(
